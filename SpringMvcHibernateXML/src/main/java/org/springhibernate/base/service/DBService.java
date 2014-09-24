@@ -85,6 +85,12 @@ public class DBService implements DBServiceInterface<Adres>{
 		sessionFactory.getCurrentSession().delete(adresToDelete);
 	}
 
+	@Override
+	public boolean isEmpty(int id) {		
+				
+		return get(id) == null;
+	}
+
 	
 
 	

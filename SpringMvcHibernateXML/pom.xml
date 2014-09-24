@@ -40,6 +40,11 @@
 		    <type>jar</type>
 		    <scope>compile</scope>
 		</dependency>	
+		<!-- <dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring-version}</version>
+		</dependency>-->
 			
 		<!--  Hibernate -->
 		<dependency>
@@ -47,6 +52,11 @@
 		    <artifactId>hibernate-core</artifactId>
 		    <version>4.3.6.Final</version>
 		</dependency>
+		<!-- <dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate-version}</version>
+		</dependency>-->
 		
 		<!-- AspectJ -->
 		<dependency>
@@ -110,7 +120,14 @@
 			<artifactId>javax.inject</artifactId>
 			<version>1</version>
 		</dependency>
-				
+
+		<!-- Validation -->
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>1.0.0.GA</version>
+		</dependency>
+
 		<!-- Servlet -->
 		<dependency>
 		    <groupId>javax.servlet</groupId>
@@ -144,6 +161,17 @@
 		    <version>5.1.30</version>
 		</dependency>
 	
+		<!-- JSON -->
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.10</version>
+		</dependency>
 	
 		<!-- Test -->
 		<dependency>

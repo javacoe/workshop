@@ -17,5 +17,7 @@ public interface DBServiceInterface<E>{
 	
 	public E get(int id);
 	
-	public void delete(int id);	
+	public void delete(int id);
+	
+	public boolean isEmpty(int id);
 }
