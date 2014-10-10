@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:sws="http://www.springframework.org/schema/web-services"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.1.xsd
+		http://www.springframework.org/schema/web-services http://www.springframework.org/schema/web-services/web-services-2.0.xsd">
+
+	<import resource="classpath:spring-business.xml" />
+
+
+
+	<context:annotation-config />
+
+
+
+	<context:component-scan base-package="nl.kadaster.web.ws" />
+	<sws:annotation-driven />
+
+
+
+<!-- 	<bean id="marshallingPayloadMethodProcessor" -->
+<!-- 		class="org.springframework.ws.server.endpoint.adapter.method.MarshallingPayloadMethodProcessor"> -->
+<!-- 		<constructor-arg ref="adresMarshaller" /> -->
+<!-- 	</bean> -->
+
+<!-- 	<bean id="adresMarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller"> -->
+<!-- 		<property name="contextPaths"> -->
+<!-- 			<list> -->
+<!-- 				<value>com.capgemini.adres.schema</value> -->
+<!-- 			</list> -->
+<!-- 		</property> -->
+<!-- 	</bean> -->
+
+<!-- 	<bean id="defaultMethodEndpointAdapter" -->
+<!-- 		class="org.springframework.ws.server.endpoint.adapter.DefaultMethodEndpointAdapter"> -->
+<!-- 		<property name="methodArgumentResolvers"> -->
+<!-- 			<list> -->
+<!-- 				<ref bean="marshallingPayloadMethodProcessor" /> -->
+<!-- 			</list> -->
+<!-- 		</property> -->
+<!-- 		<property name="methodReturnValueHandlers"> -->
+<!-- 			<list> -->
+<!-- 				<ref bean="marshallingPayloadMethodProcessor" /> -->
+<!-- 			</list> -->
+<!-- 		</property> -->
+<!-- 	</bean> -->
+
+
+
+	<sws:static-wsdl id="adres-raadplegen"
+		location="classpath:/schema/AdresRaadplegenWS.wsdl" />
+
+	<sws:interceptors>
+		<bean id="validatingInterceptor"
+			class="org.springframework.ws.soap.server.endpoint.interceptor.PayloadValidatingInterceptor">
+			<property name="schema"
+				value="classpath:/schema/AdresRaadplegenMessages.xsd" />
+			<property name="validateRequest" value="true" />
+			<property name="validateResponse" value="true" />
+		</bean>
+		<bean
+			class="org.springframework.ws.server.endpoint.interceptor.PayloadLoggingInterceptor">
+			<property name="logRequest" value="true" />
+ 			<property name="logResponse" value="true" />
+ 		</bean>
+	</sws:interceptors>
+
+
+
+	<!-- Kan dit hieronder simpeler?? -->
+	
+	<bean id="wsdlDefinitionHandlerAdapter" class="org.springframework.ws.transport.http.WsdlDefinitionHandlerAdapter">
+		<property name="transformSchemaLocations" value="true" />
+	</bean>
+
+	<bean id="messageFactory" class="org.springframework.ws.soap.saaj.SaajSoapMessageFactory" />
+
+	<bean
+		class="org.springframework.ws.transport.http.WebServiceMessageReceiverHandlerAdapter">
+			<property name="messageFactory" ref="messageFactory"/>
+		</bean>
+
+	<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="mappings">
+           <props>
+             <prop key="*.wsdl">myServiceDefinition</prop>
+           </props>
+        </property>
+		<property name="defaultHandler" ref="messageDispatcher" />
+	</bean>
+
+	<bean id="messageDispatcher"
+		class="org.springframework.ws.soap.server.SoapMessageDispatcher" />
+
+	<bean id="myServiceDefinition" class="org.springframework.ws.wsdl.wsdl11.SimpleWsdl11Definition">
+       <property name="wsdl" value="classpath:/schema/AdresRaadplegenWS.wsdl"/>
+    </bean>
+
+	<bean
+		class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter" />
+
+	<bean id="objectFactory" class="com.capgemini.adres.schema.ObjectFactory" />
+
+</beans>

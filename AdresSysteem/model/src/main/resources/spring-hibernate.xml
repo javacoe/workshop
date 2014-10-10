@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+	<context:property-placeholder location="classpath:database.properties" />
+
+	<bean id="myDataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+	
+	<context:component-scan base-package="org.springhibernate.base" />
+
+	<bean id="mySessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="myDataSource" />
+		<property name="annotatedClasses">
+			<list>
+				<value>nl.kadaster.core.domain.Adres</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+
+				<!-- JDBC connection pool (use the built-in) -->
+				<prop key="hibernate.connection.pool_size">1</prop>
+
+				<!-- Enable Hibernate's automatic session context management -->
+				<prop key="hibernate.current_session_context_class">thread</prop>
+
+				<!-- Disable the second-level cache -->
+				<prop key="hibernate.cache.provider_class">org.hibernate.cache.NoCacheProvider</prop>
+
+				<!-- Echo all executed SQL to stdout -->
+				<prop key="hibernate.show_sql">true</prop>
+
+				<!-- Drop and re-create the database schema on startup -->
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+
+				<prop key="hibernate.format_sql">true</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="adresRepository" class="nl.kadaster.data.AdresDAO">
+		<property name="sessionFactory" ref="mySessionFactory" />
+	</bean>
+</beans>

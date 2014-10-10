@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:adres="http://www.capgemini.com/adres/schema" elementFormDefault="qualified"
+	targetNamespace="http://www.capgemini.com/adres/schema">
+
+	<xs:element name="AdresRaadplegenRequest">
+		<xs:complexType>
+			<xs:all>
+				<xs:element name="verzoek" type="adres:AdresRaadplegenRequestType" />
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="AdresRaadplegenRequestType">
+		<xs:sequence>
+			<xs:element name="identificatie" type="xs:int"></xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:element name="AdresRaadplegenResponse">
+		<xs:complexType>
+			<xs:all>
+				<xs:element name="antword" type="adres:AdresRaadplegenResponseType" />
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="AdresRaadplegenResponseType">
+		<xs:sequence>
+			<xs:element name="adres" type="adres:AdresType"></xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="AdresType">
+		<xs:sequence>
+			<xs:element name="identificatie" type="xs:int" maxOccurs="1"
+				minOccurs="1">
+			</xs:element>
+			<xs:element name="straatnaam" maxOccurs="1" minOccurs="1"
+				block="extension">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="50"></xs:maxLength>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="huisnummer" type="xs:int" maxOccurs="1"
+				minOccurs="1">
+			</xs:element>
+			<xs:element name="huisletter" maxOccurs="1" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="6"></xs:maxLength>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="huisnummerToevoeging" type="xs:string"
+				maxOccurs="1" minOccurs="0"></xs:element>
+			<xs:element name="woonplaats" maxOccurs="1" minOccurs="1">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="100"></xs:maxLength>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="postcode" maxOccurs="1" minOccurs="1">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern value="[1-9]{1}[0-9]{3}[A-Z]{2}"></xs:pattern>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+</xs:schema>
