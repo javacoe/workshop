@@ -14,12 +14,14 @@ import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.capgemini.adres.schema.AdresRaadplegenRequest;
 import com.capgemini.adres.schema.AdresRaadplegenRequestType;
 import com.capgemini.adres.schema.AdresRaadplegenResponse;
+import com.capgemini.adres.schema.ObjectFactory;
 
 @RunWith(EasyMockRunner.class)
 public class AdresServiceEndpointTest {
@@ -29,7 +31,16 @@ public class AdresServiceEndpointTest {
 	
 	@Mock
 	private BusinessService businessServiceMock;
-
+	
+	@Mock
+	private ObjectFactory objectFactoryMock;
+	
+	private static ObjectFactory objectFactory;
+	
+	@BeforeClass
+	public static void setUpClass() {
+		objectFactory = new ObjectFactory();
+	}
 	
 	@Test
 	public void testGetAdres(){
@@ -49,6 +60,14 @@ public class AdresServiceEndpointTest {
 		EasyMock.expect(businessServiceMock.getAdres(EasyMock.captureInt(captured))).andReturn(adres);
 		
 		EasyMock.replay(businessServiceMock);
+		
+		EasyMock.expect(objectFactoryMock.createAdresRaadplegenResponse())
+				.andReturn(objectFactory.createAdresRaadplegenResponse());
+		EasyMock.expect(objectFactoryMock.createAdresRaadplegenResponseType())
+				.andReturn(objectFactory.createAdresRaadplegenResponseType());
+		EasyMock.expect(objectFactoryMock.createAdresType())
+				.andReturn(objectFactory.createAdresType());
+		EasyMock.replay(objectFactoryMock);
 		
 		//method to test
 		AdresRaadplegenResponse raadplegenResponse = endpoint.getAdres(request);
