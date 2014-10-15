@@ -14,6 +14,7 @@ import org.springframework.ws.soap.SoapHeader;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import com.capgemini.adres.schema.AdresRaadplegenRequest;
 import com.capgemini.adres.schema.AdresRaadplegenResponse;
 import com.capgemini.adres.schema.AdresRaadplegenResponseType;
 import com.capgemini.adres.schema.AdresType;
@@ -37,10 +38,9 @@ public class AdresServiceEndpoint {
 //	@SoapAction(value="http://www.capgemini.com/adres/schema/AdresRaadplegenRequest")
 	@PayloadRoot(localPart = "AdresRaadplegenRequest", namespace = "http://www.capgemini.com/adres/schema")
 	@ResponsePayload
-	public AdresRaadplegenResponse getAdres(@RequestPayload Element element, SoapHeader header) {
+	public AdresRaadplegenResponse getAdres(@RequestPayload AdresRaadplegenRequest request) {
 		LOG.trace("calling getAdres() from AdresServiceEndpoint");
-		NodeList nodeList = element.getElementsByTagName("sch:identificatie");
-		int index = Integer.parseInt(nodeList.item(0).getFirstChild().getNodeValue());
+		int index = request.getVerzoek().getIdentificatie();
 		LOG.debug("identificatie {} uit bericht gehaald", index);
 		Adres adres = businessService.getAdres(index);
 		LOG.debug("returning Adres met index {}: {}", index, adres);
